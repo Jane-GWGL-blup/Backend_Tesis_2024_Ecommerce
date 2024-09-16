@@ -7,182 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id           Int       @id @default(autoincrement())
-  name         String
-  email        String    @unique
-  password     String
-  role         Role      @default(USER)
-  profileImage String?
-  orders       Order[]
-  addresses    Address[]
-  cart         Cart?
-  reviews      Review[]
-  invoices     Invoice[]
-  createdAt    DateTime  @default(now())
-
-  @@map("users")
+model User{
+  id Int @id @default(autoincrement())
+  name String
+  email String @unique
+  password String
+  role  Role  @default(USER)
+  created_at DateTime @default(now())
 }
 
-model Product {
-  id          Int        @id @default(autoincrement())
-  name        String
-  description String?
-  price       Float
-  categoryId  Int?
-  category    Category?  @relation(fields: [categoryId], references: [id])
-  orderitem   OrderItem[]
-  cartItems   CartItem[]
-  invoiceDetails InvoiceDetail[]
-  stock       Int        @default(0)
-  reviews     Review[]
-  createdAt   DateTime   @default(now())
-
-  @@map("products")
+model Product{
+  id  Int @id @default(autoincrement())
+  name String @unique
+  price Int @default(99)
+  createAt  DateTime @default(now())
+  category  Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  stock Int @default(0)
 }
 
-model Category {
-  id          Int        @id @default(autoincrement())
-  name        String
-  products    Product[]
-  createdAt   DateTime   @default(now())
-
-  @@map("categories")
-}
-
-model Order {
-  id          Int        @id @default(autoincrement())
-  userId      Int
-  user        User       @relation(fields: [userId], references: [id])
-  items       OrderItem[]
-  totalAmount Float
-  payment     Payment?
-  shipment    Shipment?
-  createdAt   DateTime   @default(now())
-
-  @@map("orders")
-}
-
-model OrderItem {
-  id          Int        @id @default(autoincrement())
-  orderId     Int
-  order       Order      @relation(fields: [orderId], references: [id])
-  productId   Int
-  product     Product    @relation(fields: [productId], references: [id])
-  quantity    Int
-  price       Float
-
-  @@map("order_items")
-}
-
-model Address {
-  id          Int        @id @default(autoincrement())
-  userId      Int
-  user        User       @relation(fields: [userId], references: [id])
-  street      String
-  city        String
-  state       String
-  country     String
-  zipCode     String
-  createdAt   DateTime   @default(now())
-
-  @@map("addresses")
-}
-
-model Cart {
-  id          Int        @id @default(autoincrement())
-  userId      Int        @unique
-  user        User       @relation(fields: [userId], references: [id])
-  items       CartItem[]
-
-  @@map("carts")
-}
-
-model CartItem {
-  id          Int        @id @default(autoincrement())
-  cartId      Int
-  cart        Cart       @relation(fields: [cartId], references: [id])
-  productId   Int
-  product     Product    @relation(fields: [productId], references: [id])
-  quantity    Int
-
-  @@map("cart_items")
-}
-
-model Review {
-  id          Int        @id @default(autoincrement())
-  productId   Int
-  product     Product    @relation(fields: [productId], references: [id])
-  userId      Int
-  user        User       @relation(fields: [userId], references: [id])
-  rating      Int
-  comment     String?
-  createdAt   DateTime   @default(now())
-
-  @@map("reviews")
-}
-
-model Invoice {
-  id          Int        @id @default(autoincrement())
-  userId      Int
-  user        User       @relation(fields: [userId], references: [id])
-  invoiceDetails InvoiceDetail[]
-  totalAmount Float
-  createdAt   DateTime   @default(now())
-
-  @@map("invoices")
-}
-
-model InvoiceDetail {
-  id          Int        @id @default(autoincrement())
-  invoiceId   Int
-  invoice     Invoice    @relation(fields: [invoiceId], references: [id])
-  productId   Int
-  product     Product    @relation(fields: [productId], references: [id])
-  quantity    Int
-  price       Float
-
-  @@map("invoice_details")
-}
-
-model Payment {
-  id          Int        @id @default(autoincrement())
-  orderId     Int        @unique
-  order       Order      @relation(fields: [orderId], references: [id])
-  amount      Float
-  method      String
-  status      PaymentStatus
-  createdAt   DateTime   @default(now())
-
-  @@map("payments")
-}
-
-model Shipment {
-  id          Int        @id @default(autoincrement())
-  orderId     Int        @unique
-  order       Order      @relation(fields: [orderId], references: [id])
-  trackingNumber String
-  carrier     String
-  status      ShipmentStatus
-  createdAt   DateTime   @default(now())
-
-  @@map("shipments")
+model Category{
+  id Int  @id @default(autoincrement())
+  name  String @unique
+  products Product[]
 }
 
 enum Role {
   USER
   ADMIN
-}
-
-enum PaymentStatus {
-  PENDING
-  COMPLETED
-  FAILED
-}
-
-enum ShipmentStatus {
-  PENDING
-  SHIPPED
-  DELIVERED
-  RETURNED
 }
