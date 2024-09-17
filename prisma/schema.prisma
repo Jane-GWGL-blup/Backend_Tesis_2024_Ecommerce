@@ -21,10 +21,11 @@ model Product{
   id  Int @id @default(autoincrement())
   name String @unique
   price Int @default(99)
-  createAt  DateTime @default(now())
   category  Category @relation(fields: [categoryId], references: [id])
   categoryId Int
+  items OrderItem[] //relacion con la tabla OrderItem
   stock Int @default(0)
+  createAt  DateTime @default(now())
 }
 
 model Category{
@@ -38,8 +39,20 @@ model Order {
   id  Int @id @default(autoincrement())
   user  User @relation(fields: [userId], references: [id]) 
   userId Int 
+  items OrderItem[]
   totalAmount Float
   createdAt DateTime @default(now())
+}
+
+model OrderItem{
+  id Int @id @default(autoincrement())
+  order Order @relation(fields:[orderId], references: [id])
+  orderId Int //Esta es la llave foranea hacia la tabla de order
+  product Product @relation(fields: [productId], references: [id])
+  productId Int //esta es la llave foranea a la tabla de product
+  quantity Int //cantidad de productos en la orden
+  price Float // precio del producto al momento de la compra
+  createAt DateTime @default(now())
 }
 
 enum Role {
