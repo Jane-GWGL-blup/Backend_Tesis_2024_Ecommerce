@@ -16,7 +16,7 @@ export const getOrders = async (req,res) => {
         const getOrder = await getAllOrders();
         res.json(getOrder)
     } catch (error) {
-        res.statu(500).json({ message: "Error al obtener las ordenes"})
+        res.status(500).json({ message: "Error al obtener las ordenes"})
     }
 }
 

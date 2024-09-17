@@ -12,6 +12,7 @@ model User{
   name String
   email String @unique
   password String
+  orders Order[]
   role  Role  @default(USER)
   created_at DateTime @default(now())
 }
@@ -30,11 +31,13 @@ model Category{
   id Int  @id @default(autoincrement())
   name  String @unique
   products Product[]
+
 }
 
 model Order {
   id  Int @id @default(autoincrement())
-  userId  Int 
+  user  User @relation(fields: [userId], references: [id]) 
+  userId Int 
   totalAmount Float
   createdAt DateTime @default(now())
 }
