@@ -4,6 +4,7 @@ import userRoutes from './routes/users.routes.js'
 import productsRoutes from './routes/products.routes.js'
 import categoryRoutes from './routes/categories.routes.js'
 import authRoutes from './routes/auth.routes.js'
+import orderRoutes from './routes/orders.routes.js'
 
 import morgan from 'morgan'
 
@@ -16,6 +17,7 @@ app.use('/api', userRoutes);
 app.use('/api', productsRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', authRoutes);
+app.use('/api', orderRoutes)
 
 app.listen(PORT)
 console.log("Server on port",PORT)

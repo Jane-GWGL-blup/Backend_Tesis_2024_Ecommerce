@@ -32,6 +32,13 @@ model Category{
   products Product[]
 }
 
+model Order {
+  id  Int @id @default(autoincrement())
+  userId  Int 
+  totalAmount Float
+  createdAt DateTime @default(now())
+}
+
 enum Role {
   USER
   ADMIN
