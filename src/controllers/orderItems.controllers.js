@@ -46,7 +46,7 @@ export const deleteOrdenItems = async (req,res) =>{
 //Actualizacion
 export const updateOrderItems = async(req,res) => {
     try {
-        const orderItemUpdate = await orderItemService.updateOrdenItem(parseInt(req.params.id), req.body)
+        const orderItemUpdate = await orderItemService.updateOrderItem(parseInt(req.params.id), req.body)
         res.json(orderItemUpdate)
     } catch (error) {
         res.status(500).json({error: 'Error al actualizar el item de la orden'})
