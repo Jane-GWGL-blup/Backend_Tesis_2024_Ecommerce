@@ -16,6 +16,7 @@ export const createOrderItem = async (req,res) =>{
         const orderItems = await orderItemService.createNewOrderItem(req.body)
         res.status(201).json(orderItems)
     } catch (error) {
+        console.error("Error al crear el OrderItem:", error);  // Imprime el error en la consola
         res.status(500).json({message: 'Error al crear el item de la orden'})
     }
 }
@@ -39,6 +40,7 @@ export const deleteOrdenItems = async (req,res) =>{
         const orderItemDelete = await orderItemService.deleteOrderItem(parseInt(req.params.id))
         res.json(orderItemDelete)
     } catch (error) {
+        console.error("Error al eliminar el OrderItem:", error);  // Imprime el error en la consola
         res.status(500).json({error: 'Error al eliminar el item de la orden '})
     }
 }
