@@ -6,6 +6,8 @@ import categoryRoutes from './routes/categories.routes.js'
 import authRoutes from './routes/auth.routes.js'
 import orderRoutes from './routes/orders.routes.js'
 import orderItemRoutes from './routes/orderItems.routes.js'
+import cartRoutes from './routes/carts.routes.js'
+
 
 import morgan from 'morgan'
 
@@ -20,6 +22,7 @@ app.use('/api', categoryRoutes);
 app.use('/api', authRoutes);
 app.use('/api', orderRoutes)
 app.use('/api', orderItemRoutes)
+app.use('/api', cartRoutes)
 
 app.listen(PORT)
 console.log("Server on port",PORT)
