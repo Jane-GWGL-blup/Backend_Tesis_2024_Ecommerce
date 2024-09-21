@@ -141,6 +141,37 @@ export const createOrderFromCart = async(userId)=>{
     return order;
 }
 
+//Funcion para generar una factura despues del pago
+export const generateInvoice = async (orderId) =>{
+    //Obtener la orden y sus detalles
+    const order = await prisma.order.findUnique({
+        where:{id:orderId},
+        include:{items:{include:{product:true}}}
+    })
+    if (!order) {
+        throw new Error('Orden no encontrada')
+    }
+    // Crear el número de la factura (puedes personalizar este formato)
+    const invoiceNumber = `INV-${orderId}-${Date.now()}`;
+
+    //Crear la factura en la base de datos
+    const invoice = await prisma.invoice.create({
+        data:{
+            orderId:order.id,
+            invoiceNumber,
+            totalAmount:order.totalAmount,
+            invoiceDetails:{
+                create:order.items.map(item=>({
+                    productId:item.productId,
+                    quantity:item.quantity,
+                    price:item.price
+                }))
+            }
+        }
+    })
+    return invoice
+}
+
 // Simular el pago de una orden
 export const payForOrder = async (orderId) => {
     // Verificar que el orderId esté definido y sea un número válido
@@ -167,7 +198,10 @@ export const payForOrder = async (orderId) => {
         data: { status: 'PAID' }  // Cambiar el estado a Pagado
     });
 
-    return updatedOrder;
+    //generarla factura
+    const invoice = await generateInvoice(orderId)
+
+    return {updatedOrder,invoice};
 };
 
 // Obtener las órdenes de un usuario específico
