@@ -1,21 +1,24 @@
 import { Router } from "express";
 import { createOrderItem,deleteOrdenItems,getOrderItemById, getOrderItems, updateOrderItems } from "../controllers/orderItems.controllers.js";
+import { authenticateToken, authorizeRoles } from "../middlewares/auth.middleware.js";
 
 const router = Router()
 
-// crea un nuevo OrderItem
-router.post('/order-items', createOrderItem)
-
+//los usuarios autenticados pueden ver sus propios orderItems
 // Obtener los items de una orden especifica
-router.get('/order-items/:id',getOrderItemById)
+router.get('/order-items/:id',authenticateToken,getOrderItemById)
 
-//listadop
-router.get('/order-items', getOrderItems)
+// Solo ADMIN puede crear, actualizar y eliminar OrderItems
+// crea un nuevo OrderItem
+router.post('/order-items', authenticateToken, createOrderItem)
+
+//listado
+router.get('/order-items', authenticateToken, getOrderItems)
 
 //eliminacion
-router.delete('/order-items/:id', deleteOrdenItems)
+router.delete('/order-items/:id', authenticateToken, authorizeRoles(['ADMIN']), deleteOrdenItems)
 
 //actualizacion
-router.put('/order-items/:id', updateOrderItems)
+router.put('/order-items/:id', authenticateToken, authorizeRoles(['ADMIN']), updateOrderItems)
 
 export default router
