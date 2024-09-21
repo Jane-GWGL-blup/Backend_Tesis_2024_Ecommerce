@@ -2,6 +2,8 @@ import {
     prisma
 } from '../db/index.js';
 
+
+
 // Listado
 export const getAllOrders = () => {
     return prisma.order.findMany({
