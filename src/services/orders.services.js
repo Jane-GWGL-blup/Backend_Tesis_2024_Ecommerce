@@ -205,13 +205,27 @@ export const payForOrder = async (orderId) => {
 };
 
 // Obtener las órdenes de un usuario específico
-export const getUserOrders = (userId) => {
-    return prisma.order.findMany({
-        where: { userId },
-        include: { items: true },
-    });
+export const getUserOrders = async (userId) => {
+    try {
+        console.log('Buscando órdenes para userId:', userId);
+        const orders = await prisma.order.findMany({
+            where: { userId },  // Filtramos por el ID del usuario
+            include: { 
+                items: { include: { product: true } },  // Incluir productos en los items de la orden
+                user: true  // Incluimos información del usuario
+            },
+        });
+        
+        return orders;
+    } catch (error) {
+        // Manejo del error si la consulta falla
+        console.error('Error al buscar las órdenes en la base de datos:', error);
+        throw new Error('Error al obtener las órdenes del usuario');
+    }
+    
 };
 
 const notifyLowStock = (product) => {
     console.log(`⚠️ El producto "${product.name}" tiene un stock bajo (${product.stock} unidades restantes).`)
 }
+

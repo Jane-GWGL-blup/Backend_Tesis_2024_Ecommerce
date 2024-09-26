@@ -5,7 +5,7 @@ export const getAllCategories = () => {
     return prisma.category.findMany({
       include: {
         products: true,
-      }
+      } 
     });
 };
 

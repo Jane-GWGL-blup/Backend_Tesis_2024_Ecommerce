@@ -1,11 +1,17 @@
 import bcrypt from 'bcryptjs'
-
 import {generateToken} from '../services/auth.services.js'
 import {prisma} from '../db/index.js'
 
 //funcion de registro
 export const registerUser = async (req,res) =>{
-    const {name,email,password, role} = req.body
+    const {name,email,password,confirmPassword, role} = req.body
+    // Verificar que tanto password como confirmPassword existan en el cuerpo de la solicitud
+    // console.log("Password recibido:", password);
+    // console.log("Confirmación de contraseña recibida:", confirmPassword);
+    if (password !== confirmPassword) {
+        return res.status(400).json({message: "Las contraseñas no coinciden"})
+    }
+
     try {
         // Comprobaremos si el usuario ya existe
         const userExist = await prisma.user.findUnique({
@@ -23,14 +29,13 @@ export const registerUser = async (req,res) =>{
             data:{
                 name,
                 email,
-                password: hashedPassword,
-                role
+                password: hashedPassword
             }
         })
 
         // Crear el tokenjwt
         const token = generateToken(newUser);
-            res.json({token})
+            res.status(500).json({token})
 
     } catch (error) {
 
