@@ -35,8 +35,7 @@ export const registerUser = async (req,res) =>{
 
         // Crear el tokenjwt
         const token = generateToken(newUser);
-            res.status(500).json({token})
-
+            res.status(201).json({token})
     } catch (error) {
 
         console.error(error)
