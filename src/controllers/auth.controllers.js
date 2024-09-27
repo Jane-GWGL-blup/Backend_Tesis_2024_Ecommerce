@@ -64,9 +64,9 @@ export const loginUser = async(req,res) =>{
                 return res.status(401).json({message: 'Contraseña incorrecta'})
             }
 
-        // Generar token JWT
+        // Generar token JWT y luego se envia una respuesta JSON al cliente
         const token = generateToken(user);
-            res.json({token})
+            res.json({token, role:user.role})
 
     } catch (error) {
         res.status(500).json({message: "Error en el inicio de sesion"})
