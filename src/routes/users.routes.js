@@ -4,11 +4,6 @@ import { getUsers,createUsers, getUsersById, deleteUsers, updateUsers } from "..
 
 const router = Router();
 
-//login al perfil
-router.get('/profile', authenticateToken, (req,res)=>{
-    res.json({message: `Bienvenido ${req.user.name}`})
-})
-
 //ruta solo para administradoer
 // listado de usuarios
 router.get('/users', getUsers)
