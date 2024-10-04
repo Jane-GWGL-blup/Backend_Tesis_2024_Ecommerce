@@ -39,6 +39,7 @@ model CartItem {
 model Product {
   id         Int         @id @default(autoincrement())
   name       String      @unique
+  description String?    // Agregamos el campo de descripción opcional para los productos
   price      Int         @default(99)
   stock      Int         @default(1)
   category   Category    @relation(fields: [categoryId], references: [id])
@@ -52,7 +53,9 @@ model Product {
 model Category {
   id       Int       @id @default(autoincrement())
   name     String    @unique
+  description String?    // Agregamos el campo de descripción opcional para las categorías
   products Product[]
+  createdAt DateTime @default(now())
 }
 
 model Order {

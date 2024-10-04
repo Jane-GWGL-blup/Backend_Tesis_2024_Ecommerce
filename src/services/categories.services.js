@@ -11,6 +11,9 @@ export const getAllCategories = () => {
 
 // creacion
 export const createNewCategories = (data) => {
+    if (!data.name || !data.description) {
+        throw new Error('El nombre y la descripción son obligatorios');
+    }
     return prisma.category.create({
         data
     });
@@ -19,13 +22,18 @@ export const createNewCategories = (data) => {
 // Busqueda por ID
 export const getAllCategoriesById = (id) =>{
     return prisma.category.findFirst({
-        where:{id},
+        where:{id:parseInt(id)},
         include: {products:true,}//Incluye productos asociados a la categoria
         });
 }
 
 // Eliminacion
-export const deleteCategory = (id) =>{
+export const deleteCategory = async(id) =>{
+     // Antes de eliminar la categoría, podrías actualizar los productos para que no queden sin categoría
+     const productsToUpdate = await prisma.product.updateMany({
+        where:{categoryId:id},
+        data:{categoryId: null}
+     })
     return prisma.category.delete({
         where: {id}
     })
@@ -33,6 +41,9 @@ export const deleteCategory = (id) =>{
 
 // Actualizacion
 export const updateCategory = (id,data) =>{
+    if (!data.name || !data.description) {
+        throw new Error('El nombre y la descripción son obligatorios');
+    }
     return prisma.category.update({
         where:{
             id
