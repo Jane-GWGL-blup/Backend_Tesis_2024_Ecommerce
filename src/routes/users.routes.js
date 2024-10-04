@@ -11,7 +11,8 @@ router.get('/users', getUsers)
 router.post('/users',authenticateToken, authorizeRoles(['ADMIN']), createUsers);
 
 // listado de usuarios por id
-router.get('/users/:id',authenticateToken, authorizeRoles(['ADMIN']), getUsersById)
+/* router.get('/users/:id',authenticateToken, authorizeRoles(['ADMIN']), getUsersById) */
+router.get('/users/:id', authenticateToken, getUsersById);
 
 //eliminacion de usuarios 
 router.delete('/users/:id', authenticateToken, authorizeRoles(['ADMIN']),deleteUsers)
