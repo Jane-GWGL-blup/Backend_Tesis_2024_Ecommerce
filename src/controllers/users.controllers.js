@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { generateToken } from '../services/auth.services.js'
 import { prisma } from '../db/index.js'
-import { registerUser, getAllUsers, getAllUsersById, deleteUser, updateUser } from "../services/users.services.js";
+import { registerUser, getAllUsers, getAllUsersById, deleteUser, updateUser, updateUserRole } from "../services/users.services.js";
 
 // Listado
 export const getUsers = async (req, res) => {
@@ -76,3 +76,12 @@ export const updateUsers = async (req, res) => {
     }
 }
 
+// Asignar o cambiar rol del usuario
+export const assignRole = async (req, res) => {
+    try {
+        const updatedUser = await updateUserRole(parseInt(req.params.id), req.body.role);
+        res.json(updatedUser);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al actualizar el rol del usuario' });
+    }
+};
