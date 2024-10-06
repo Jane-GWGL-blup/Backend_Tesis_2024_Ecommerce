@@ -2,8 +2,11 @@ import {prisma} from '../db/index.js'
 
 // Listado
 export const getAllProducts = () =>{
-    return prisma.product.findMany(
-        )
+    return prisma.product.findMany({
+        include:{
+            category: true
+        }
+    })
 }
 
 // Busqueda por ID

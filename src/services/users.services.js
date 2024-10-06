@@ -50,3 +50,10 @@ export const updateUser = (id, data) =>{
     })
 }
 
+// Actualizar rol del usuario
+export const updateUserRole = (id, role) => {
+    return prisma.user.update({
+        where: { id },
+        data: { role }
+    });
+};

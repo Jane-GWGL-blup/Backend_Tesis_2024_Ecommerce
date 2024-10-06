@@ -14,10 +14,14 @@ export const getCategories = async(req, res) =>{
 // Creacion de categoria
 export const createCategories = async( req,res) =>{
     try {
+        if (!req.body.name || !req.body.description) {
+            return res.status(400).json({error:'El nombre y la descripcion son obligatorios'})
+        }
         const newCategory = await createNewCategories(req.body);
         res.status(201).json(newCategory)
     } catch (error) {
-        res.status(500).json({error: 'Error al crear la categoria'});
+        console.error('Error al crear la categoría:', error);
+        res.status(500).json({ error: 'Error al crear la categoría. Por favor, intente nuevamente.' });
     }
 }
 
@@ -48,9 +52,17 @@ export const deleteCategories = async(req, res)=>{
 // Actualizacion 
 export const updateCategories = async(req, res) =>{
     try {
-        const categoryUpdate = await updateCategory(parseInt(req.params.id), req.body)
+        const {name,description} = req.body
+        if (!name || !description) {
+            return res.status(400).json({error: 'El nombre y la descripcion son obligatorias'})
+        }
+        const categoryUpdate = await updateCategory(parseInt(req.params.id),{name,description})
+        if (!categoryUpdate) {
+            return res.status(404).json({ error: 'Categoría no encontrada para actualizar.' });
+        }
         res.json(categoryUpdate)
     } catch (error) {
-        res.status(500).json({error: ' Error al actualizar la categori'})
+        console.error('Error al actualizar la categoría:', error);
+        res.status(500).json({ error: 'Error al actualizar la categoría. Por favor, intente nuevamente.' });
     }
 }
