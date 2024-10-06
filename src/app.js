@@ -19,7 +19,12 @@ const app = express()
 
 app.use(morgan('dev'))
 app.use(express.json());
-app.use(cors())
+app.use(cors({
+    origin: 'https://localhost:3000', // Cambia esto a tu dominio real
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
+  }));
+  
 
 app.use('/api', userRoutes);
 app.use('/api', productsRoutes);
