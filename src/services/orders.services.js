@@ -15,16 +15,19 @@ export const getAllOrders = () => {
 
 
 // Busqueda por Id
-export const getAllOrdersById = (id) => {
+export const getAllOrdersById = async (id) => {
     return prisma.order.findFirst({
-        where: {
-            id
+      where: { id },
+      include: {
+        items: {
+          include: {
+            product: true  // Incluir los detalles del producto en cada item de la orden
+          }
         },
-        include: {
-            user: true
-        } //se agrega los datos del usuario
-    })
-}
+        user: true,  // Incluir los detalles del usuario
+      },
+    });
+  };
 
 // Elimicación
 export const deleteOrder = (id) => {

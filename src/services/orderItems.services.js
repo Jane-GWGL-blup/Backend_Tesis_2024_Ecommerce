@@ -67,14 +67,7 @@ export const getAllOrderItemById = (id) => {
     })
 }
 
-//Eliminacion
-// export const deleteOrderItem = (id) => {
-//     return prisma.orderItem.delete({
-//         where: {
-//             id
-//         }
-//     })
-// }
+
 //Nuevo eliminacion
 export const deleteOrderItem = async(id) => {
     try {
@@ -103,15 +96,7 @@ export const deleteOrderItem = async(id) => {
     
 }
 
-//Actualizacion
-// export const updateOrderItem = (id, data) => {
-//     return prisma.orderItem.update({
-//         where: {
-//             id
-//         },
-//         data
-//     })
-// }
+
 //Nueva actualizacion
 export const updateOrderItem = async (id, data) => {
     const updatedOrderItem = await prisma.orderItem.update({
