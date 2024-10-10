@@ -8,7 +8,7 @@ const router = Router()
 router.get('/invoices/:id',authenticateToken,getInvoiceById)
 
 //obtener todas las facturas de un usuario
-router.get('/invoices',authenticateToken,getInvoicesByUser)
+//router.get('/invoices',authenticateToken,getInvoicesByUser)
 
 // Listar todas las facturas (solo accesible para administradores)
 router.get('/invoices', authenticateToken, authorizeRoles(['ADMIN']), getAllInvoices);

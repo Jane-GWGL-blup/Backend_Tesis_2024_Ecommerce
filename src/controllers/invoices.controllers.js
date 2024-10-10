@@ -32,7 +32,6 @@ export const getAllInvoices = async (req, res) => {
         res.status(500).json({ message: 'Error al obtener las facturas' });
     }
 };
-// Descargar una factura en PDF
 export const downloadInvoicePDF = async (req, res) => {
     const { id } = req.params;
     try {
@@ -41,18 +40,13 @@ export const downloadInvoicePDF = async (req, res) => {
             return res.status(404).json({ message: 'Factura no encontrada' });
         }
 
-        // Generar el PDF
-        const doc = await invoiceService.generateInvoicePDF(invoice);
+        // Generar el PDF y enviarlo en la respuesta
+        await invoiceService.generateInvoicePDF(id, res);  // Aquí estamos pasando 'res' al servicio
 
-        // Establecer el encabezado de respuesta para la descarga
-        res.setHeader('Content-disposition', 'attachment; filename=factura.pdf');
-        res.setHeader('Content-type', 'application/pdf');
-
-        // Enviar el PDF como respuesta
-        doc.pipe(res);
-        doc.end();
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error al generar el PDF' });
+        console.error('Error al generar el PDF:', error);
+        if (!res.headersSent) {
+            res.status(500).json({ message: 'Error al generar el PDF' });
+        }
     }
 };
