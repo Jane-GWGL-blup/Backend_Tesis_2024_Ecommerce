@@ -9,7 +9,7 @@ import {
     updateOrders,
     createOrder,
     payForOrder,
-    getUserOrderHistory
+    getUserOrderHistory,getUserOrders
 } from "../controllers/orders.controllers.js"
 
 import {
@@ -34,8 +34,9 @@ router.delete('/orders/:id', authenticateToken, authorizeRoles(['ADMIN']), delet
 //actualizacion
 router.put('/orders/:id',authenticateToken, authorizeRoles(['ADMIN']), updateOrders);
 //obtener el historial de ordenes del usuario autenticado
-router.get('/order/history', authenticateToken, getUserOrderHistory);
-
+router.get('/orders/history', authenticateToken, getUserOrderHistory);
+// Ruta para obtener el historial de pedidos de un usuario
+router.get('/orders/user/:userId', authenticateToken, authorizeRoles(['ADMIN']), getUserOrders);
 
 
 

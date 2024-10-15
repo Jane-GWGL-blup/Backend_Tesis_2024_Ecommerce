@@ -10,10 +10,11 @@ import orderItemRoutes from './routes/orderItems.routes.js'
 import cartRoutes from './routes/carts.routes.js'
 import invoiceRoutes from './routes/invoice.routes.js'
 import profileRoutes from './routes/profile.routes.js'
+import discounts from './routes/discounts.routes.js'
 
 
 
-import morgan from 'morgan'
+import morgan from 'morgan' 
 
 const app = express()
 
@@ -30,6 +31,7 @@ app.use('/api', orderItemRoutes)
 app.use('/api', cartRoutes)
 app.use('/api', invoiceRoutes)
 app.use('/api', profileRoutes)
+app.use('/api', discounts)
 
 
 

@@ -110,3 +110,17 @@ export const getUserOrderHistory = async (req, res) => {
         });
     }
 };
+
+// Obtener pedidos por ID de usuario
+export const getUserOrders = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const orders = await orderService.getOrdersByUserId(parseInt(userId));
+        if (!orders) {
+            return res.status(404).json({ message: 'No orders found for this user' });
+        }
+        res.json(orders);
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving orders for the user' });
+    }
+};

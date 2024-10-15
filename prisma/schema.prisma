@@ -37,25 +37,27 @@ model CartItem {
 }
 
 model Product {
-  id         Int         @id @default(autoincrement())
-  name       String      @unique
-  description String?    // Agregamos el campo de descripción opcional para los productos
-  price      Int         @default(99)
-  stock      Int         @default(1)
-  category   Category    @relation(fields: [categoryId], references: [id])
-  categoryId Int
-  items      OrderItem[] //relacion con la tabla OrderItem
-  cartItems  CartItem[]
+  id             Int             @id @default(autoincrement())
+  name           String          @unique
+  description    String? // Agregamos el campo de descripción opcional para los productos
+  price          Int             @default(99)
+  stock          Int             @default(1)
+  category       Category        @relation(fields: [categoryId], references: [id])
+  categoryId     Int
+  items          OrderItem[] //relacion con la tabla OrderItem
+  cartItems      CartItem[]
+  discountItems  Discount[]
   invoiceDetails InvoiceDetail[]
-  createAt   DateTime    @default(now())
+  createAt       DateTime        @default(now())
 }
 
 model Category {
-  id       Int       @id @default(autoincrement())
-  name     String    @unique
-  description String?    // Agregamos el campo de descripción opcional para las categorías
-  products Product[]
-  createdAt DateTime @default(now())
+  id             Int        @id @default(autoincrement())
+  name           String     @unique
+  description    String? // Agregamos el campo de descripción opcional para las categorías
+  products       Product[]
+  discountsItemd Discount[]
+  createdAt      DateTime   @default(now())
 }
 
 model Order {
@@ -63,7 +65,7 @@ model Order {
   user        User        @relation(fields: [userId], references: [id])
   userId      Int
   items       OrderItem[]
-  invoice Invoice[]
+  invoice     Invoice[]
   totalAmount Float       @default(0)
   status      OrderStatus @default(PENDING)
   createdAt   DateTime    @default(now())
@@ -80,24 +82,39 @@ model OrderItem {
   createAt  DateTime @default(now())
 }
 
-model Invoice{
-  id Int @id @default(autoincrement())
-  order Order @relation(fields: [orderId], references: [id])
-  orderId Int
-  invoiceNumber String
-  totalAmount Float
+model Invoice {
+  id             Int             @id @default(autoincrement())
+  order          Order           @relation(fields: [orderId], references: [id])
+  orderId        Int
+  invoiceNumber  String
+  totalAmount    Float
   invoiceDetails InvoiceDetail[]
-  createdAt DateTime @default(now())
+  createdAt      DateTime        @default(now())
 }
 
-model InvoiceDetail{
-  id Int @id @default(autoincrement())
-  invoice Invoice @relation(fields: [invoiceId],references: [id])
+model InvoiceDetail {
+  id        Int     @id @default(autoincrement())
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
   invoiceId Int
-  product Product @relation(fields: [productId],references: [id])
+  product   Product @relation(fields: [productId], references: [id])
   productId Int
-  quantity Int
-  price Float
+  quantity  Int
+  price     Float
+}
+
+model Discount {
+  id          Int       @id @default(autoincrement())
+  code        String    @unique //codigo del cupon
+  description String? //description del descuento
+  percentage  Float //Porcentaje de descuento(ej. 10.0 para 10%)
+  product     Product?  @relation(fields: [productId], references: [id])
+  productId   Int?
+  category    Category? @relation(fields: [categoryId], references: [id])
+  categoryId  Int?
+  startDate   DateTime //fecha de inicio del descuento
+  endDate     DateTime //fecha de fin del descuento
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 enum OrderStatus {
