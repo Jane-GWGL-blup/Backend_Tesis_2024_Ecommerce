@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { createDiscount, getDiscounts, updateDiscount, deleteDiscount,getDiscountById } from "../controllers/discounts.controllers.js";
 import { authenticateToken, authorizeRoles } from '../middlewares/auth.middleware.js';
+import { getDiscountByCode } from "../services/discounts.services.js";
 
 const router = Router();
 
@@ -18,5 +19,20 @@ router.delete('/discounts/:id', authenticateToken, authorizeRoles(['ADMIN']), de
 
 // Ruta para obtener un descuento por ID (solo accesible para administradores)
 router.get('/discounts/:id', authenticateToken, authorizeRoles(['ADMIN']), getDiscountById);
+
+// Obtener descuento por código
+router.get('/discounts/code/:code', authenticateToken, async (req, res) => {
+    const { code } = req.params;
+    try {
+      const discount = await getDiscountByCode(code);
+      if (!discount) {
+        return res.status(404).json({ message: 'Discount code not found' });
+      }
+      res.json(discount);
+    } catch (error) {
+      console.error('Error fetching discount by code:', error);
+      res.status(500).json({ message: 'Error fetching discount' });
+    }
+  });
 
 export default router;

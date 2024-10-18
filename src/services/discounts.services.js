@@ -69,3 +69,4 @@ export const getDiscountById = async (id) => {
         throw new Error('Error al obtener el descuento por ID');
     }
 };
+
